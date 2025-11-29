@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { format, isSameDay } from 'date-fns';
 import EventCalendar from './EventCalendar';
 import TimeSelector from './TimeSelector';
-import DayView from './DayView';
+import AvailabilityPopup from './AvailabilityPopup';
+import AvailabilitySummary from './AvailabilitySummary';
 import { getUserColorByName } from '../utils/colors';
 
 const EventView = () => {
@@ -18,7 +19,7 @@ const EventView = () => {
 
     // Modal states
     const [selectingDate, setSelectingDate] = useState(null); // Date object for TimeSelector
-    const [viewingDate, setViewingDate] = useState(null); // Date object for DayView
+    const [viewingDate, setViewingDate] = useState(null); // Date string for AvailabilityPopup
 
     useEffect(() => {
         fetchEvent();
@@ -64,7 +65,7 @@ const EventView = () => {
     };
 
     const handleViewDateClick = (date) => {
-        setViewingDate(date);
+        setViewingDate(date.toISOString().split('T')[0]);
     };
 
     const handleSubmit = async (e) => {
@@ -197,6 +198,8 @@ const EventView = () => {
                             </div>
                         )}
                     </div>
+
+                    <AvailabilitySummary availabilities={availabilities} />
                 </div>
             </div>
 
@@ -210,7 +213,7 @@ const EventView = () => {
             )}
 
             {viewingDate && (
-                <DayView
+                <AvailabilityPopup
                     date={viewingDate}
                     availabilities={availabilities}
                     onClose={() => setViewingDate(null)}

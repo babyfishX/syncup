@@ -87,8 +87,13 @@ const EventCalendar = ({
                             key={date.toString()}
                             className={className}
                             onClick={() => {
-                                if (mode === 'input' && !isPast && allowed && onDateSelect) {
-                                    onDateSelect(date);
+                                if (onDateSelect) {
+                                    if (mode === 'input') {
+                                        if (!isPast && allowed) onDateSelect(date);
+                                    } else {
+                                        // In view mode, always allow clicking to see details
+                                        onDateSelect(date);
+                                    }
                                 }
                             }}
                             style={{ position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}
