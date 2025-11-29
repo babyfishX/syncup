@@ -26,7 +26,7 @@ const EventView = () => {
 
     const fetchEvent = async () => {
         try {
-            const response = await fetch(`http://localhost:3001/api/events/${id}`);
+            const response = await fetch(`/api/events/${id}`);
             if (!response.ok) throw new Error('Event not found');
             const data = await response.json();
             setEvent(data.event);
@@ -75,7 +75,7 @@ const EventView = () => {
         }
 
         try {
-            await fetch(`http://localhost:3001/api/events/${id}/availability`, {
+            await fetch(`/api/events/${id}/availability`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ user_name: userName, selected_slots: selectedSlots }),
