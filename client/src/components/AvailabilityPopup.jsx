@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 const AvailabilityPopup = ({ date, availabilities, onClose }) => {
     if (!date) return null;
@@ -19,7 +19,7 @@ const AvailabilityPopup = ({ date, availabilities, onClose }) => {
         <div className="popup-overlay" onClick={onClose}>
             <div className="popup-content" onClick={e => e.stopPropagation()}>
                 <div className="popup-header">
-                    <h3>Availability for {format(new Date(date), 'MMMM d, yyyy')}</h3>
+                    <h3>Availability for {format(parseISO(date), 'MMMM d, yyyy')}</h3>
                     <button className="close-btn" onClick={onClose}>&times;</button>
                 </div>
                 <div className="popup-body">
