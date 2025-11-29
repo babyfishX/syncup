@@ -36,12 +36,15 @@ const CreateEventForm = () => {
         }
 
         try {
+            console.log('Creating event...', { name, description, dates: selectedDates });
             const response = await fetch('/api/events', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, description, dates: selectedDates }),
             });
+            console.log('Response status:', response.status);
             const data = await response.json();
+            console.log('Response data:', data);
             navigate(`/event/${data.id}`);
         } catch (error) {
             console.error('Error creating event:', error);
