@@ -107,15 +107,32 @@ class Database {
   async createAvailability(eventId, userName, selectedSlots) {
     const slotsJson = JSON.stringify(selectedSlots);
     if (this.isPostgres) {
-      await this.db.query(
-        'INSERT INTO availabilities (event_id, user_name, selected_slots) VALUES ($1, $2, $3)',
-        [eventId, userName, slotsJson]
+      // Try to update first
+      const result = await this.db.query(
+        'UPDATE availabilities SET selected_slots = $1 WHERE event_id = $2 AND user_name = $3',
+        [slotsJson, eventId, userName]
       );
+
+      // If no row was updated, insert a new one
+      if (result.rowCount === 0) {
+        await this.db.query(
+          'INSERT INTO availabilities (event_id, user_name, selected_slots) VALUES ($1, $2, $3)',
+          [eventId, userName, slotsJson]
+        );
+      }
     } else {
-      await this.db.run(
-        'INSERT INTO availabilities (event_id, user_name, selected_slots) VALUES (?, ?, ?)',
-        [eventId, userName, slotsJson]
+      // SQLite implementation
+      const result = await this.db.run(
+        'UPDATE availabilities SET selected_slots = ? WHERE event_id = ? AND user_name = ?',
+        [slotsJson, eventId, userName]
       );
+
+      if (result.changes === 0) {
+        await this.db.run(
+          'INSERT INTO availabilities (event_id, user_name, selected_slots) VALUES (?, ?, ?)',
+          [eventId, userName, slotsJson]
+        );
+      }
     }
   }
 }
