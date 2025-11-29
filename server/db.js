@@ -1,9 +1,20 @@
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
+const path = require('path');
+const fs = require('fs');
 
 async function initDB() {
+  // Use persistent storage on Render, fallback to local for development
+  const dataDir = process.env.RENDER ? '/opt/render/project/data' : __dirname;
+  const dbPath = path.join(dataDir, 'database.sqlite');
+
+  // Ensure data directory exists
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+
   const db = await open({
-    filename: './database.sqlite',
+    filename: dbPath,
     driver: sqlite3.Database
   });
 
