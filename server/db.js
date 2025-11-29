@@ -33,18 +33,23 @@ async function initDB() {
     // Return a wrapper that mimics sqlite API
     return {
       get: async (sql, ...params) => {
-        const result = await pool.query(sql.replace(/\?/g, (_, i) => `$${params.indexOf(_) + 1}`), params);
+        // Convert ? placeholders to $1, $2, etc.
+        let index = 0;
+        const pgSql = sql.replace(/\?/g, () => `$${++index}`);
+        const result = await pool.query(pgSql, params);
         return result.rows[0];
       },
       all: async (sql, ...params) => {
-        const result = await pool.query(sql.replace(/\?/g, (_, i) => `$${params.indexOf(_) + 1}`), params);
+        // Convert ? placeholders to $1, $2, etc.
+        let index = 0;
+        const pgSql = sql.replace(/\?/g, () => `$${++index}`);
+        const result = await pool.query(pgSql, params);
         return result.rows;
       },
       run: async (sql, ...params) => {
-        const pgSql = sql.replace(/\?/g, (match, offset) => {
-          const index = sql.substring(0, offset).split('?').length;
-          return `$${index}`;
-        });
+        // Convert ? placeholders to $1, $2, etc.
+        let index = 0;
+        const pgSql = sql.replace(/\?/g, () => `$${++index}`);
         await pool.query(pgSql, params);
       }
     };
