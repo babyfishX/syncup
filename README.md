@@ -5,8 +5,14 @@ A web app for coordinating group schedules with time slot selection and color-co
 ## Features
 - Create events with date ranges
 - Mark availability with specific time slots
-- Color-coded participant view
+- **Detailed Availability Popup** (Table view of participants)
+- **Dynamic Summary Box** (Best dates & overlapping time windows)
+- **Timezone Enforcement** (US Eastern Time)
+- Color-coded participant view (25+ distinct colors)
 - Side-by-side availability display
+
+## Live Demo
+**https://christinacalendarsync.onrender.com**
 
 ## Deployment
 

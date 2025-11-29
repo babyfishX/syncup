@@ -55,7 +55,7 @@ const CreateEventForm = () => {
     return (
         <div className="container">
             <div className="header">
-                <h1>SyncUp</h1>
+                <h1>Christina & Co.'s Calendar Syncup</h1>
                 <p style={{ color: 'var(--color-text-muted)' }}>Coordinate group schedules effortlessly.</p>
             </div>
 
