@@ -31,7 +31,7 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
             backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
         }}>
             <div className="card" style={{ width: '90%', maxWidth: '400px', margin: 0 }}>
-                <h3>Availability for {date.toLocaleDateString()}</h3>
+                <h3>Availability for {date.toLocaleDateString()} (ET)</h3>
 
                 <div style={{ marginBottom: '1rem' }}>
                     <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '0.5rem' }}>

@@ -101,7 +101,7 @@ const AvailabilitySummary = ({ availabilities }) => {
             border: '1px solid var(--color-border)'
         }}>
             <h4 style={{ marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span>✨</span> Best Time to Meet
+                <span>✨</span> Best Time to Meet (ET)
             </h4>
 
             <div style={{ fontSize: '0.9rem' }}>

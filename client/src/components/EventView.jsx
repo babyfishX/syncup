@@ -50,7 +50,9 @@ const EventView = () => {
 
     const handleTimeSave = (ranges) => {
         if (!selectingDate) return;
-        const dateStr = selectingDate.toISOString().split('T')[0];
+        // Use format to keep the local date string (e.g. "2023-12-14") 
+        // instead of toISOString which might shift to UTC previous day
+        const dateStr = format(selectingDate, 'yyyy-MM-dd');
 
         // Remove existing entry for this date if exists
         const newSlots = selectedSlots.filter(s => s.date !== dateStr);
@@ -65,7 +67,7 @@ const EventView = () => {
     };
 
     const handleViewDateClick = (date) => {
-        setViewingDate(date.toISOString().split('T')[0]);
+        setViewingDate(format(date, 'yyyy-MM-dd'));
     };
 
     const handleSubmit = async (e) => {
@@ -206,7 +208,7 @@ const EventView = () => {
             {selectingDate && (
                 <TimeSelector
                     date={selectingDate}
-                    initialRanges={selectedSlots.find(s => s.date === selectingDate.toISOString().split('T')[0])?.ranges}
+                    initialRanges={selectedSlots.find(s => s.date === format(selectingDate, 'yyyy-MM-dd'))?.ranges}
                     onSave={handleTimeSave}
                     onCancel={() => setSelectingDate(null)}
                 />
