@@ -21,27 +21,30 @@ const EventCalendar = ({
 
     // Helper to check if a date is selected (handling both simple strings and objects)
     const isSelected = (date) => {
+        const dateStr = format(date, 'yyyy-MM-dd');
         return selectedDates.some(d => {
-            const dStr = typeof d === 'string' ? d : d.date;
-            return isSameDay(new Date(dStr), date);
+            const dVal = typeof d === 'string' ? d : d.date;
+            return dVal === dateStr;
         });
     };
 
     const getDayAvailability = (date) => {
         if (mode !== 'view') return [];
+        const dateStr = format(date, 'yyyy-MM-dd');
         return availabilities.filter(a => {
             // a.selected_slots is now expected to be an array of objects { date, ranges }
             // But for backward compatibility or simple mode, check if it's strings
             return a.selected_slots.some(slot => {
                 const slotDate = typeof slot === 'string' ? slot : slot.date;
-                return isSameDay(new Date(slotDate), date);
+                return slotDate === dateStr;
             });
         });
     };
 
     const isAllowed = (date) => {
         if (!allowedDates || allowedDates.length === 0) return true;
-        return allowedDates.some(d => isSameDay(new Date(d), date));
+        const dateStr = format(date, 'yyyy-MM-dd');
+        return allowedDates.some(d => d === dateStr);
     };
 
     return (
@@ -79,7 +82,7 @@ const EventCalendar = ({
                     // Find my selection for this date (for input mode)
                     const mySelection = selectedDates.find(d => {
                         const dStr = typeof d === 'string' ? d : d.date;
-                        return isSameDay(new Date(dStr), date);
+                        return dStr === format(date, 'yyyy-MM-dd');
                     });
 
                     return (
