@@ -4,7 +4,7 @@
     "description": "Group calendar coordination app",
     "scripts": {
         "install-all": "cd server && npm install && cd ../client && npm install",
-        "build": "cd client && npm run build",
+        "build": "cd client && npm run build && cd ../server && npm rebuild sqlite3",
         "start": "cd server && npm start"
     },
     "engines": {
