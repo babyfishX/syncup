@@ -1,0 +1,13 @@
+{
+    "name": "syncup",
+    "version": "1.0.0",
+    "description": "Group calendar coordination app",
+    "scripts": {
+        "install-all": "cd server && npm install && cd ../client && npm install",
+        "build": "cd client && npm run build",
+        "start": "cd server && npm start"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    }
+}
