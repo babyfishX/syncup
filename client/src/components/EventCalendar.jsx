@@ -43,8 +43,7 @@ const EventCalendar = ({
 
     const isAllowed = (date) => {
         if (!allowedDates || allowedDates.length === 0) return true;
-        const dateStr = format(date, 'yyyy-MM-dd');
-        return allowedDates.some(d => d === dateStr);
+        return allowedDates.some(d => isSameDay(new Date(d), date));
     };
 
     return (

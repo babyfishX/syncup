@@ -24,8 +24,8 @@ const CreateEventForm = () => {
             }
             try {
                 const range = eachDayOfInterval({
-                    start: startOfDay(new Date(startDate)),
-                    end: startOfDay(new Date(endDate))
+                    start: startOfDay(new Date(startDate + 'T00:00:00')),
+                    end: startOfDay(new Date(endDate + 'T00:00:00'))
                 });
                 selectedDates = range.map(d => d.toISOString());
             } catch (err) {
