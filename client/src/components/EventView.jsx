@@ -63,7 +63,7 @@ const EventView = () => {
         }
 
         setSelectedSlots(newSlots);
-        setSelectingDate(null);
+        // Don't close the modal - user must click X to close
     };
 
     const handleViewDateClick = (date) => {
@@ -122,14 +122,15 @@ const EventView = () => {
                 </div>
             </div>
 
-            <div className="event-view-grid" style={{
+            <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
                 gap: '2rem',
                 alignItems: 'flex-start',
                 justifyContent: 'center'
             }}>
-                <div className="card" style={{ flex: '1 1 400px', margin: 0 }}>
+                {/* Left column: Mark your availability / Submitted */}
+                <div className="card" style={{ flex: '1 1 400px', maxWidth: '550px', margin: 0 }}>
                     {!submitted ? (
                         <form onSubmit={handleSubmit}>
                             <h3 style={{ marginTop: 0 }}>Mark your availability</h3>
@@ -164,7 +165,7 @@ const EventView = () => {
                             </button>
                         </form>
                     ) : (
-                        <div style={{ textAlign: 'center' }}>
+                        <div style={{ textAlign: 'center', padding: '2rem 0' }}>
                             <h3 style={{ color: 'var(--color-success)' }}>Availability Submitted!</h3>
                             <p>Thanks for letting us know when you're free.</p>
                             <button onClick={() => setSubmitted(false)} style={{ marginTop: '1rem' }}>Edit Response</button>
@@ -172,36 +173,43 @@ const EventView = () => {
                     )}
                 </div>
 
-                <div className="card card-accent" style={{ flex: '1 1 400px', margin: 0 }}>
-                    <h3 style={{ marginTop: 0 }}>Group Availability</h3>
-                    <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-                        Click a date to see who is free and when.
-                    </p>
-                    <EventCalendar
-                        mode="view"
-                        availabilities={availabilities}
-                        onDateSelect={handleViewDateClick}
-                    />
+                {/* Right column: Summary Box and Group Availability stacked */}
+                <div style={{ flex: '1 1 400px', maxWidth: '550px', margin: 0, display: 'flex', flexDirection: 'column', gap: availabilities.length > 0 ? '2rem' : '0' }}>
+                    {availabilities.length > 0 && (
+                        <div style={{ width: '100%' }}>
+                            <AvailabilitySummary availabilities={availabilities} />
+                        </div>
+                    )}
 
-                    <div style={{ marginTop: '2rem' }}>
-                        <h4>Participants:</h4>
-                        {availabilities.length === 0 ? (
-                            <p style={{ color: 'var(--color-text-muted)' }}>No responses yet.</p>
-                        ) : (
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                {availabilities.map(a => (
-                                    <span key={a.id} style={{
-                                        padding: '0.25rem 0.75rem', borderRadius: '999px',
-                                        backgroundColor: getUserColorByName(a.user_name), color: 'white', fontSize: '0.875rem'
-                                    }}>
-                                        {a.user_name}
-                                    </span>
-                                ))}
-                            </div>
-                        )}
+                    <div className="card card-accent" style={{ margin: 0, width: '100%' }}>
+                        <h3 style={{ marginTop: 0 }}>Group Availability</h3>
+                        <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+                            Click a date to see who is free and when.
+                        </p>
+                        <EventCalendar
+                            mode="view"
+                            availabilities={availabilities}
+                            onDateSelect={handleViewDateClick}
+                        />
+
+                        <div style={{ marginTop: '2rem' }}>
+                            <h4>Participants:</h4>
+                            {availabilities.length === 0 ? (
+                                <p style={{ color: 'var(--color-text-muted)' }}>No responses yet.</p>
+                            ) : (
+                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    {availabilities.map(a => (
+                                        <span key={a.id} style={{
+                                            padding: '0.25rem 0.75rem', borderRadius: '999px',
+                                            backgroundColor: getUserColorByName(a.user_name), color: 'white', fontSize: '0.875rem'
+                                        }}>
+                                            {a.user_name}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
                     </div>
-
-                    <AvailabilitySummary availabilities={availabilities} />
                 </div>
             </div>
 

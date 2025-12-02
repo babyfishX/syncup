@@ -41,13 +41,11 @@ const AvailabilitySummary = ({ availabilities }) => {
         return h * 60 + m;
     };
 
-    // Helper to convert minutes to "h:mm a"
+    // Helper to convert minutes to "HH:MM" (24-hour format)
     const toTimeStr = (minutes) => {
         const h = Math.floor(minutes / 60);
         const m = minutes % 60;
-        const ampm = h >= 12 ? 'PM' : 'AM';
-        const h12 = h % 12 || 12;
-        return `${h12}:${m.toString().padStart(2, '0')} ${ampm}`;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
     };
 
     // 4. Calculate overlapping time windows for best dates
@@ -93,12 +91,11 @@ const AvailabilitySummary = ({ availabilities }) => {
     });
 
     return (
-        <div className="summary-box" style={{
-            marginTop: '2rem',
-            padding: '1rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--color-border)'
+        <div className="card" style={{
+            margin: 0,
+            background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(20, 184, 166, 0.15) 100%)',
+            border: '1px solid rgba(16, 185, 129, 0.4)',
+            boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.15), 0 2px 4px -2px rgba(16, 185, 129, 0.1)'
         }}>
             <h4 style={{ marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span>✨</span> Best Time to Meet (ET)
@@ -124,12 +121,13 @@ const AvailabilitySummary = ({ availabilities }) => {
                                 <div style={{
                                     display: 'inline-block',
                                     padding: '0.25rem 0.5rem',
-                                    backgroundColor: 'rgba(34, 197, 94, 0.2)',
-                                    color: '#4ade80',
+                                    backgroundColor: 'rgba(56, 189, 248, 0.25)',
+                                    color: '#f0fdfa',
                                     borderRadius: '4px',
                                     fontWeight: 'bold',
                                     fontSize: '0.85rem',
-                                    marginBottom: '0.5rem'
+                                    marginBottom: '0.5rem',
+                                    border: '1px solid rgba(56, 189, 248, 0.4)'
                                 }}>
                                     {timeWindows.join(', ')}
                                 </div>
