@@ -186,11 +186,11 @@ const EventView = () => {
                 <div style={{ flex: '1 1 400px', maxWidth: '550px', margin: 0, display: 'flex', flexDirection: 'column', gap: availabilities.length > 0 ? '2rem' : '0' }}>
                     {availabilities.length > 0 && (
                         <div style={{ width: '100%' }}>
-                            <AvailabilitySummary availabilities={availabilities} />
+                            <AvailabilitySummary availabilities={availabilities} style={{ maxWidth: '100%' }} />
                         </div>
                     )}
 
-                    <div className="card card-accent" style={{ margin: 0, width: '100%' }}>
+                    <div className="card card-accent" style={{ margin: 0, width: '100%', maxWidth: '100%' }}>
                         <h3 style={{ marginTop: 0 }}>Group Availability</h3>
                         <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
                             Click a date to see who is free and when.

@@ -1,7 +1,7 @@
 import React from 'react';
 import { format, parseISO } from 'date-fns';
 
-const AvailabilitySummary = ({ availabilities }) => {
+const AvailabilitySummary = ({ availabilities, style }) => {
     if (!availabilities || availabilities.length === 0) return null;
 
     // 1. Flatten all availability slots
@@ -95,7 +95,8 @@ const AvailabilitySummary = ({ availabilities }) => {
             margin: 0,
             background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(20, 184, 166, 0.15) 100%)',
             border: '1px solid rgba(16, 185, 129, 0.4)',
-            boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.15), 0 2px 4px -2px rgba(16, 185, 129, 0.1)'
+            boxShadow: '0 4px 6px -1px rgba(16, 185, 129, 0.15), 0 2px 4px -2px rgba(16, 185, 129, 0.1)',
+            ...style
         }}>
             <h4 style={{ marginTop: 0, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span>✨</span> Best Time to Meet (ET)
