@@ -106,12 +106,7 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
             backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
         }}>
             <div className="card" style={{ width: '90%', maxWidth: '500px', margin: 0, maxHeight: '90vh', overflowY: 'auto' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <h3 style={{ margin: 0 }}>Availability for {date.toLocaleDateString()} (ET)</h3>
-                    <button onClick={onCancel} style={{
-                        border: 'none', background: 'none', fontSize: '1.5rem', cursor: 'pointer', color: 'var(--color-text-muted)'
-                    }}>×</button>
-                </div>
+                <h3 style={{ margin: 0, marginBottom: '1rem' }}>Availability for {date.toLocaleDateString()} (ET)</h3>
 
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
                     Add your available time slots using 24-hour format (e.g., 14:30 for 2:30 PM). Changes save automatically.
@@ -262,6 +257,12 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
                 <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '1rem', fontStyle: 'italic' }}>
                     Adjacent time slots will be automatically merged.
                 </p>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+                    <button onClick={onCancel} className="btn-primary" style={{ padding: '0.5rem 1.5rem' }}>
+                        Submit
+                    </button>
+                </div>
             </div>
         </div>
     );

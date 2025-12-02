@@ -170,7 +170,7 @@ const EventView = () => {
                             </div>
 
                             <button type="submit" className="btn-primary" style={{ width: '100%' }}>
-                                Submit Availability
+                                Confirm Availability
                             </button>
                         </form>
                     ) : (
