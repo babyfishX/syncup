@@ -186,12 +186,19 @@ textarea:focus {
 
 .share-link {
   display: flex;
-  gap: 0.5rem;
+  gap: 0;
   background: var(--color-bg);
   padding: 0.5rem;
   border-radius: var(--radius-md);
   align-items: center;
-  margin-top: 1rem;
+}
+
+.share-link span {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .share-link code {
@@ -201,6 +208,8 @@ textarea:focus {
   white-space: nowrap;
   font-family: monospace;
   color: var(--color-text-muted);
+  padding-left: 0.25rem;
+  margin: 0;
 }
 
 /* Popup Styles */

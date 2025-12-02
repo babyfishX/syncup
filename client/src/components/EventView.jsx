@@ -115,6 +115,15 @@ const EventView = () => {
                 <h1>{event.name}</h1>
                 <p style={{ color: 'var(--color-text-muted)' }}>{event.description}</p>
 
+                <p style={{
+                    fontSize: '0.9rem',
+                    color: 'var(--color-text-muted)',
+                    marginTop: '1.5rem',
+                    marginBottom: '0.25rem',
+                    textAlign: 'left'
+                }}>
+                    📤 Share this link with participants so they can mark their availability:
+                </p>
                 <div className="share-link">
                     <span>🔗</span>
                     <code>{window.location.href}</code>
