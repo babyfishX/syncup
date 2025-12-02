@@ -122,7 +122,7 @@ const EventView = () => {
                     marginBottom: '0.25rem',
                     textAlign: 'left'
                 }}>
-                    📤 Share this link with participants so they can mark their availability:
+                    Share this link with participants so they can mark their availability:
                 </p>
                 <div className="share-link">
                     <span>🔗</span>
