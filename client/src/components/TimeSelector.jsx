@@ -117,6 +117,10 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
                     Add your available time slots using 24-hour format (e.g., 14:30 for 2:30 PM). Changes save automatically.
                 </p>
 
+                <p style={{ fontSize: '0.875rem', color: 'var(--color-primary)', marginBottom: '1rem', fontWeight: 500 }}>
+                    ⏰ All times should be entered in Eastern Time (ET)
+                </p>
+
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {slots.map((slot, index) => {
                         const isEmpty = !slot.start && !slot.end;
