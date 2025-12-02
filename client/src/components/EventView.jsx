@@ -142,7 +142,7 @@ const EventView = () => {
                 <div className="card" style={{ flex: '1 1 300px', maxWidth: '550px', margin: 0 }}>
                     {!submitted ? (
                         <form onSubmit={handleSubmit}>
-                            <h3 style={{ marginTop: 0 }}>Mark your availability</h3>
+                            <h3 style={{ marginTop: 0 }}>Mark Your Availability</h3>
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Your Name</label>
                                 <input
