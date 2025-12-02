@@ -191,6 +191,7 @@ textarea:focus {
   padding: 0.5rem;
   border-radius: var(--radius-md);
   align-items: center;
+  justify-content: center;
 }
 
 .share-link span {
