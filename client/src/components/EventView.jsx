@@ -139,7 +139,7 @@ const EventView = () => {
                 justifyContent: 'center'
             }}>
                 {/* Left column: Mark your availability / Submitted */}
-                <div className="card" style={{ flex: '1 1 400px', maxWidth: '550px', margin: 0 }}>
+                <div className="card" style={{ flex: '1 1 300px', maxWidth: '550px', margin: 0 }}>
                     {!submitted ? (
                         <form onSubmit={handleSubmit}>
                             <h3 style={{ marginTop: 0 }}>Mark your availability</h3>
@@ -183,7 +183,7 @@ const EventView = () => {
                 </div>
 
                 {/* Right column: Summary Box and Group Availability stacked */}
-                <div style={{ flex: '1 1 400px', maxWidth: '550px', margin: 0, display: 'flex', flexDirection: 'column', gap: availabilities.length > 0 ? '2rem' : '0' }}>
+                <div style={{ flex: '1 1 300px', maxWidth: '550px', margin: 0, display: 'flex', flexDirection: 'column', gap: availabilities.length > 0 ? '2rem' : '0' }}>
                     {availabilities.length > 0 && (
                         <div style={{ width: '100%' }}>
                             <AvailabilitySummary availabilities={availabilities} style={{ maxWidth: '100%' }} />
