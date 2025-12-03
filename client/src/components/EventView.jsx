@@ -258,20 +258,28 @@ const EventView = () => {
 
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Select Dates & Times</label>
-                                <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-                                    {event.dates && event.dates.length > 0
-                                        ? "Click an available date to add your availability based on your current timezone."
-                                        : "Click any date to add your availability based on your current timezone."}
-                                    <br />
-                                    <span style={{ fontSize: '0.8rem', fontStyle: 'italic' }}>
-                                        Times entered will be automatically converted to and displayed in Eastern Time (ET).
-                                    </span>
-                                </p>
+                                <div style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
+                                    <div style={{ fontSize: '0.875rem', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                                            <span>•</span>
+                                            <span>
+                                                {event.dates && event.dates.length > 0
+                                                    ? "Click an available date to add your availability based on your current timezone."
+                                                    : "Click any date to add your availability based on your current timezone."}
+                                            </span>
+                                        </div>
+                                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                                            <span>•</span>
+                                            <span>Times entered will be automatically converted to and displayed in Eastern Time (ET).</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <EventCalendar
                                     selectedDates={selectedSlots}
                                     onDateSelect={handleDateClick}
                                     mode="input"
                                     allowedDates={event.dates}
+                                    initialMonth={event.dates && event.dates.length > 0 ? new Date(event.dates[0]) : new Date()}
                                 />
                             </div>
 

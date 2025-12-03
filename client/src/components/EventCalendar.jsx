@@ -7,9 +7,13 @@ const EventCalendar = ({
     onDateSelect,
     mode = 'input', // 'input' or 'view'
     availabilities = [],
-    allowedDates = [] // Optional: Array of allowed date strings
+    allowedDates = [], // Optional: Array of allowed date strings
+    initialMonth = null // Optional: Initial month to display
 }) => {
-    const [currentMonth, setCurrentMonth] = useState(new Date());
+    const [currentMonth, setCurrentMonth] = useState(() => {
+        if (initialMonth) return initialMonth;
+        return new Date();
+    });
 
     const daysInMonth = eachDayOfInterval({
         start: startOfMonth(currentMonth),

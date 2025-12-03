@@ -122,7 +122,7 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
                 <h3 style={{ margin: 0, marginBottom: '1rem' }}>Availability for {date.toLocaleDateString()}</h3>
 
                 <div style={{ marginBottom: '1.5rem' }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Your Timezone</label>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Select your timezone from the dropdown list</label>
                     <select
                         value={timezone}
                         onChange={(e) => setTimezone(e.target.value)}

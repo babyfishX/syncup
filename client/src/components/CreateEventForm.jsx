@@ -62,10 +62,11 @@ const CreateEventForm = () => {
             <div className="card">
                 <form onSubmit={handleSubmit}>
                     <p style={{
+                        marginTop: '0',
                         marginBottom: '1.5rem',
                         textAlign: 'center',
                         fontSize: '0.875rem',
-                        color: 'var(--color-text-muted)'
+                        color: '#22d3ee'
                     }}>
                         Note: A unique URL will be generated for this event to share with your group for availability tracking.
                     </p>
