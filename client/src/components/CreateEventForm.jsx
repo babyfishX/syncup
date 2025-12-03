@@ -61,6 +61,14 @@ const CreateEventForm = () => {
 
             <div className="card">
                 <form onSubmit={handleSubmit}>
+                    <p style={{
+                        marginBottom: '1.5rem',
+                        textAlign: 'center',
+                        fontSize: '0.875rem',
+                        color: 'var(--color-text-muted)'
+                    }}>
+                        Note: A unique URL will be generated for this event to share with your group for availability tracking.
+                    </p>
                     <div style={{ marginBottom: '1.5rem' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Event Name</label>
                         <input
