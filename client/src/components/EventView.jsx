@@ -97,72 +97,36 @@ const EventView = () => {
             }
         });
 
-        // Now merge these into selectedSlots
-        // We need to be careful not to overwrite existing slots for other dates, 
-        // but we SHOULD overwrite slots for the dates we are touching?
-        // Actually, the user might be adding slots for a date that maps to multiple ET dates.
-        // The previous logic was: "Remove existing entry for this date if exists".
-        // But "this date" was the local date. Now we are dealing with potentially multiple ET dates.
+        // Strategy: When editing a date, we need to clear ALL slots that might have been
+        // created from this selectingDate in a previous save (which could span multiple ET dates
+        // due to timezone conversion). Then add the new slots.
+        // 
+        // To identify which slots to clear: we need to determine which ET dates could have
+        // been created from selectingDate. This is tricky because we don't know the previous timezone.
+        // 
+        // Simplified approach: When user clicks on a date to edit, we'll clear slots for:
+        // 1. The exact selectingDate (in case it was entered in ET originally)
+        // 2. The day before selectingDate (in case a late night slot in a western timezone created this date)
+        // 3. The day after selectingDate (in case an early morning slot in an eastern timezone created this date)
 
-        // Strategy: 
-        // 1. Remove all slots that originated from this "selectingDate" interaction? 
-        //    Hard to track.
-        // 2. Or, just merge into existing.
-        //    But if user clears slots, we want to remove them.
+        const selectingDateStr = format(selectingDate, 'yyyy-MM-dd');
+        const dayBefore = format(new Date(selectingDate.getTime() - 24 * 60 * 60 * 1000), 'yyyy-MM-dd');
+        const dayAfter = format(new Date(selectingDate.getTime() + 24 * 60 * 60 * 1000), 'yyyy-MM-dd');
 
-        // Let's assume for now we just append/merge.
-        // But wait, if I edit "Dec 25" and save, I expect "Dec 25" slots to be replaced.
-        // But "Dec 25" in PT might be "Dec 25" and "Dec 26" in ET.
-        // If I clear "Dec 25", I want both to be cleared.
+        // Remove slots for these three dates
+        let newSelectedSlots = selectedSlots.filter(s =>
+            s.date !== selectingDateStr && s.date !== dayBefore && s.date !== dayAfter
+        );
 
-        // To do this correctly, we might need to store the source date/timezone, but we don't have that schema.
-        // Simplified approach:
-        // We will just add the new slots. If there are overlaps, the backend or display logic handles it?
-        // No, we need to manage `selectedSlots` state.
-
-        // Let's try to remove slots for the ET dates that are affected?
-        // That might be too aggressive if user added slots for Dec 26 directly.
-
-        // Alternative: Just add them. The user can verify in the summary.
-        // But we need to handle the "Remove existing entry" part.
-        // The previous logic removed `s.date !== dateStr`.
-
-        // Let's stick to: Remove entries for the ET dates that we are about to write to?
-        // No, that deletes other valid slots.
-
-        // Let's just Add/Merge. 
-        // We'll filter out the *exact same* ranges if they exist, or just rely on a cleanup pass?
-        // Let's just append for now and maybe implement a merge utility.
-
-        // Actually, `selectedSlots` is an array of objects.
-        // We should group `etSlotsToAdd` by date.
+        // Now add the new slots
         const slotsByDate = {};
         etSlotsToAdd.forEach(item => {
             if (!slotsByDate[item.date]) slotsByDate[item.date] = [];
             slotsByDate[item.date].push(item.range);
         });
 
-        let newSelectedSlots = [...selectedSlots];
-
-        // For each affected date, we want to merge the new ranges with existing ones?
-        // Or should we assume the user is "setting" the availability for this day?
-        // Since we are converting, it's ambiguous.
-        // Let's assume we are ADDING availability.
-
         Object.keys(slotsByDate).forEach(date => {
-            const existingIndex = newSelectedSlots.findIndex(s => s.date === date);
-            if (existingIndex >= 0) {
-                // Merge
-                const existingRanges = newSelectedSlots[existingIndex].ranges;
-                const newRanges = [...existingRanges, ...slotsByDate[date]];
-                // We should probably sort and merge overlapping ranges here to keep it clean
-                // But TimeSelector does that. We can reuse a simple merge logic if we want, 
-                // or just store them and let the backend/summary handle it.
-                // Let's just store them.
-                newSelectedSlots[existingIndex] = { date, ranges: newRanges };
-            } else {
-                newSelectedSlots.push({ date, ranges: slotsByDate[date] });
-            }
+            newSelectedSlots.push({ date, ranges: slotsByDate[date] });
         });
 
         setSelectedSlots(newSelectedSlots);
