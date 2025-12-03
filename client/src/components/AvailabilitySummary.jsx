@@ -105,6 +105,10 @@ const AvailabilitySummary = ({ availabilities, style }) => {
             <div style={{ fontSize: '0.9rem' }}>
                 <p style={{ margin: '0 0 1rem 0' }}>
                     <strong>{maxCount}</strong> out of <strong>{availabilities.length}</strong> people are available on:
+                    <br />
+                    <span style={{ fontSize: '0.8rem', fontStyle: 'italic', color: 'var(--color-text-muted)' }}>
+                        All times shown are in Eastern Time (ET).
+                    </span>
                 </p>
                 <ul style={{ margin: 0, paddingLeft: '0', listStyle: 'none' }}>
                     {bestDatesWithWindows.map(({ date, users, timeWindows }) => (

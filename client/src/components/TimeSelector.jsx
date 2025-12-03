@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { format } from 'date-fns';
 
 const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
     // Convert initial ranges to editable slots
@@ -11,6 +12,26 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
         }
         return [{ id: 0, start: '', end: '' }];
     });
+
+    const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+
+    const timezones = [
+        { value: 'America/New_York', label: 'Eastern Time (ET)' },
+        { value: 'America/Chicago', label: 'Central Time (CT)' },
+        { value: 'America/Denver', label: 'Mountain Time (MT)' },
+        { value: 'America/Los_Angeles', label: 'Pacific Time (PT)' },
+        { value: 'Europe/London', label: 'London (GMT/BST)' },
+        { value: 'Europe/Paris', label: 'Paris (CET/CEST)' },
+        { value: 'Europe/Berlin', label: 'Berlin (CET/CEST)' },
+        { value: 'Asia/Dubai', label: 'Dubai (GST)' },
+        { value: 'Asia/Kolkata', label: 'India (IST)' },
+        { value: 'Asia/Shanghai', label: 'China (CST)' },
+        { value: 'Asia/Hong_Kong', label: 'Hong Kong (HKT)' },
+        { value: 'Asia/Singapore', label: 'Singapore (SGT)' },
+        { value: 'Asia/Tokyo', label: 'Tokyo (JST)' },
+        { value: 'Asia/Seoul', label: 'Seoul (KST)' },
+        { value: 'Australia/Sydney', label: 'Sydney (AEST/AEDT)' },
+    ];
 
     const mergeRanges = (rangesToMerge) => {
         if (rangesToMerge.length === 0) return [];
@@ -48,14 +69,15 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
         return merged.map(i => `${fromMinutes(i.start)}-${fromMinutes(i.end)}`);
     };
 
-    const autoSave = (updatedSlots) => {
+    const handleSave = () => {
         // Filter out empty slots and convert to ranges
-        const validRanges = updatedSlots
+        const validRanges = slots
             .filter(slot => slot.start && slot.end && slot.start < slot.end)
             .map(slot => `${slot.start}-${slot.end}`);
 
         const merged = mergeRanges(validRanges);
-        onSave(merged);
+        onSave(merged, timezone);
+        onCancel();
     };
 
     const updateSlot = (id, field, value) => {
@@ -63,12 +85,6 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
             slot.id === id ? { ...slot, [field]: value } : slot
         );
         setSlots(updatedSlots);
-
-        // Only auto-save if the updated slot has both start and end times
-        const updatedSlot = updatedSlots.find(s => s.id === id);
-        if (updatedSlot && updatedSlot.start && updatedSlot.end) {
-            autoSave(updatedSlots);
-        }
     };
 
     const addSlot = () => {
@@ -84,7 +100,6 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
             updatedSlots.push({ id: 0, start: '', end: '' });
         }
         setSlots(updatedSlots);
-        autoSave(updatedSlots);
     };
 
     // Ensure there's always an empty slot at the end, but only add one when all slots are complete
@@ -98,22 +113,32 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
         }
     }, [slots]);
 
-    // Removed auto-close on overlay click - user must use X button
-
     return (
         <div className="modal-overlay" style={{
             position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
             backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
         }}>
             <div className="card" style={{ width: '90%', maxWidth: '500px', margin: 0, maxHeight: '90vh', overflowY: 'auto' }}>
-                <h3 style={{ margin: 0, marginBottom: '1rem' }}>Availability for {date.toLocaleDateString()} (ET)</h3>
+                <h3 style={{ margin: 0, marginBottom: '1rem' }}>Availability for {date.toLocaleDateString()}</h3>
+
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500 }}>Your Timezone</label>
+                    <select
+                        value={timezone}
+                        onChange={(e) => setTimezone(e.target.value)}
+                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid var(--color-border)' }}
+                    >
+                        {timezones.map(tz => (
+                            <option key={tz.value} value={tz.value}>{tz.label}</option>
+                        ))}
+                        {!timezones.some(tz => tz.value === timezone) && (
+                            <option value={timezone}>{timezone} (Detected)</option>
+                        )}
+                    </select>
+                </div>
 
                 <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-                    Add your available time slots using 24-hour format (e.g., 14:30 for 2:30 PM). Changes save automatically.
-                </p>
-
-                <p style={{ fontSize: '0.875rem', color: 'var(--color-primary)', marginBottom: '1rem', fontWeight: 500 }}>
-                    ⏰ All times should be entered in Eastern Time (ET)
+                    Add your available time slots in your selected timezone.
                 </p>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
@@ -259,7 +284,7 @@ const TimeSelector = ({ date, initialRanges = [], onSave, onCancel }) => {
                 </p>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
-                    <button onClick={onCancel} className="btn-primary" style={{ padding: '0.5rem 1.5rem' }}>
+                    <button onClick={handleSave} className="btn-primary" style={{ padding: '0.5rem 1.5rem' }}>
                         Submit
                     </button>
                 </div>
