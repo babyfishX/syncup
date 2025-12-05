@@ -246,7 +246,10 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         color: 'var(--color-text)',
                                                                         cursor: 'pointer',
                                                                         fontSize: '0.85rem',
-                                                                        transition: 'background-color 0.2s'
+                                                                        transition: 'background-color 0.2s',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '0.5rem'
                                                                     }}
                                                                     onMouseEnter={(e) => {
                                                                         e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -255,7 +258,8 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         e.target.style.backgroundColor = 'transparent';
                                                                     }}
                                                                 >
-                                                                    📥 Download iCal (.ics)
+                                                                    <img src="/icons/apple-calendar.png" alt="Apple" style={{ width: '16px', height: '16px' }} />
+                                                                    Apple iCal Calendar
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleCalendarDownload(date, timeWindow, 'google')}
@@ -268,7 +272,10 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         color: 'var(--color-text)',
                                                                         cursor: 'pointer',
                                                                         fontSize: '0.85rem',
-                                                                        transition: 'background-color 0.2s'
+                                                                        transition: 'background-color 0.2s',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '0.5rem'
                                                                     }}
                                                                     onMouseEnter={(e) => {
                                                                         e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -277,7 +284,8 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         e.target.style.backgroundColor = 'transparent';
                                                                     }}
                                                                 >
-                                                                    🔗 Google Calendar
+                                                                    <img src="/icons/google-calendar.png" alt="Google" style={{ width: '16px', height: '16px' }} />
+                                                                    Google Calendar
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleCalendarDownload(date, timeWindow, 'yahoo')}
@@ -290,7 +298,10 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         color: 'var(--color-text)',
                                                                         cursor: 'pointer',
                                                                         fontSize: '0.85rem',
-                                                                        transition: 'background-color 0.2s'
+                                                                        transition: 'background-color 0.2s',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '0.5rem'
                                                                     }}
                                                                     onMouseEnter={(e) => {
                                                                         e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -299,7 +310,8 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         e.target.style.backgroundColor = 'transparent';
                                                                     }}
                                                                 >
-                                                                    🔗 Yahoo Calendar
+                                                                    <img src="/icons/yahoo-calendar.svg" alt="Yahoo" style={{ width: '16px', height: '16px' }} />
+                                                                    Yahoo Calendar
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleCalendarDownload(date, timeWindow, 'outlook')}
@@ -312,7 +324,10 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         color: 'var(--color-text)',
                                                                         cursor: 'pointer',
                                                                         fontSize: '0.85rem',
-                                                                        transition: 'background-color 0.2s'
+                                                                        transition: 'background-color 0.2s',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '0.5rem'
                                                                     }}
                                                                     onMouseEnter={(e) => {
                                                                         e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
@@ -321,7 +336,8 @@ const AvailabilitySummary = ({ availabilities, event, style }) => {
                                                                         e.target.style.backgroundColor = 'transparent';
                                                                     }}
                                                                 >
-                                                                    🔗 Outlook Calendar
+                                                                    <img src="/icons/outlook-calendar.svg" alt="Outlook" style={{ width: '16px', height: '16px' }} />
+                                                                    Outlook Calendar
                                                                 </button>
                                                             </div>
                                                         </>
