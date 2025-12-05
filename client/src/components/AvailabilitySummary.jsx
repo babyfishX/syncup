@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { format, parseISO } from 'date-fns';
+import {
+    generateICalFile,
+    downloadICalFile,
+    generateGoogleCalendarUrl,
+    generateYahooCalendarUrl,
+    generateOutlookCalendarUrl
+} from '../utils/calendarUtils';
 
-const AvailabilitySummary = ({ availabilities, style }) => {
+
+const AvailabilitySummary = ({ availabilities, event, style }) => {
+    const [openDropdown, setOpenDropdown] = useState(null);
+
     if (!availabilities || availabilities.length === 0) return null;
 
     // 1. Flatten all availability slots
@@ -90,6 +100,35 @@ const AvailabilitySummary = ({ availabilities, style }) => {
         };
     });
 
+    // Handler for calendar downloads
+    const handleCalendarDownload = (date, timeWindow, type) => {
+        if (!event) return;
+
+        const [startTime, endTime] = timeWindow.split(' - ');
+        const eventParams = {
+            title: event.name,
+            description: event.description || '',
+            date,
+            startTime,
+            endTime,
+            attendees: dateStats[date].users
+        };
+
+        if (type === 'ical') {
+            const icalContent = generateICalFile(eventParams);
+            const filename = `${event.name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_${date}.ics`;
+            downloadICalFile(icalContent, filename);
+        } else if (type === 'google') {
+            window.open(generateGoogleCalendarUrl(eventParams), '_blank');
+        } else if (type === 'yahoo') {
+            window.open(generateYahooCalendarUrl(eventParams), '_blank');
+        } else if (type === 'outlook') {
+            window.open(generateOutlookCalendarUrl(eventParams), '_blank');
+        }
+
+        setOpenDropdown(null);
+    };
+
     return (
         <div className="card" style={{
             margin: 0,
@@ -123,18 +162,174 @@ const AvailabilitySummary = ({ availabilities, style }) => {
                             </div>
 
                             {timeWindows.length > 0 ? (
-                                <div style={{
-                                    display: 'inline-block',
-                                    padding: '0.25rem 0.5rem',
-                                    backgroundColor: 'rgba(56, 189, 248, 0.25)',
-                                    color: '#f0fdfa',
-                                    borderRadius: '4px',
-                                    fontWeight: 'bold',
-                                    fontSize: '0.85rem',
-                                    marginBottom: '0.5rem',
-                                    border: '1px solid rgba(56, 189, 248, 0.4)'
-                                }}>
-                                    {timeWindows.join(', ')}
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                    {timeWindows.map((timeWindow, idx) => (
+                                        <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                            <div style={{
+                                                display: 'inline-block',
+                                                padding: '0.25rem 0.5rem',
+                                                backgroundColor: 'rgba(56, 189, 248, 0.25)',
+                                                color: '#f0fdfa',
+                                                borderRadius: '4px',
+                                                fontWeight: 'bold',
+                                                fontSize: '0.85rem',
+                                                border: '1px solid rgba(56, 189, 248, 0.4)'
+                                            }}>
+                                                {timeWindow}
+                                            </div>
+
+                                            {event && (
+                                                <div style={{ position: 'relative', display: 'inline-block' }}>
+                                                    <button
+                                                        onClick={() => setOpenDropdown(openDropdown === `${date}-${idx}` ? null : `${date}-${idx}`)}
+                                                        style={{
+                                                            padding: '0.25rem 0.75rem',
+                                                            fontSize: '0.75rem',
+                                                            backgroundColor: 'rgba(16, 185, 129, 0.3)',
+                                                            border: '1px solid rgba(16, 185, 129, 0.6)',
+                                                            borderRadius: '4px',
+                                                            color: '#f0fdfa',
+                                                            cursor: 'pointer',
+                                                            fontWeight: '600',
+                                                            transition: 'all 0.2s',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.25rem'
+                                                        }}
+                                                        onMouseEnter={(e) => {
+                                                            e.target.style.backgroundColor = 'rgba(16, 185, 129, 0.4)';
+                                                        }}
+                                                        onMouseLeave={(e) => {
+                                                            e.target.style.backgroundColor = 'rgba(16, 185, 129, 0.3)';
+                                                        }}
+                                                    >
+                                                        📅 Add to Calendar
+                                                        <span style={{ fontSize: '0.6rem' }}>▼</span>
+                                                    </button>
+
+                                                    {openDropdown === `${date}-${idx}` && (
+                                                        <>
+                                                            {/* Backdrop to close dropdown */}
+                                                            <div
+                                                                onClick={() => setOpenDropdown(null)}
+                                                                style={{
+                                                                    position: 'fixed',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    bottom: 0,
+                                                                    zIndex: 999
+                                                                }}
+                                                            />
+                                                            {/* Dropdown menu */}
+                                                            <div style={{
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                left: '100%',
+                                                                marginLeft: '0.5rem',
+                                                                backgroundColor: 'var(--color-bg-secondary)',
+                                                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                                borderRadius: '6px',
+                                                                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.3)',
+                                                                zIndex: 1000,
+                                                                minWidth: '200px',
+                                                                overflow: 'hidden'
+                                                            }}>
+                                                                <button
+                                                                    onClick={() => handleCalendarDownload(date, timeWindow, 'ical')}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        padding: '0.5rem 0.75rem',
+                                                                        textAlign: 'left',
+                                                                        backgroundColor: 'transparent',
+                                                                        border: 'none',
+                                                                        color: 'var(--color-text)',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '0.85rem',
+                                                                        transition: 'background-color 0.2s'
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.backgroundColor = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    📥 Download iCal (.ics)
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleCalendarDownload(date, timeWindow, 'google')}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        padding: '0.5rem 0.75rem',
+                                                                        textAlign: 'left',
+                                                                        backgroundColor: 'transparent',
+                                                                        border: 'none',
+                                                                        color: 'var(--color-text)',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '0.85rem',
+                                                                        transition: 'background-color 0.2s'
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.backgroundColor = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    🔗 Google Calendar
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleCalendarDownload(date, timeWindow, 'yahoo')}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        padding: '0.5rem 0.75rem',
+                                                                        textAlign: 'left',
+                                                                        backgroundColor: 'transparent',
+                                                                        border: 'none',
+                                                                        color: 'var(--color-text)',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '0.85rem',
+                                                                        transition: 'background-color 0.2s'
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.backgroundColor = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    🔗 Yahoo Calendar
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleCalendarDownload(date, timeWindow, 'outlook')}
+                                                                    style={{
+                                                                        width: '100%',
+                                                                        padding: '0.5rem 0.75rem',
+                                                                        textAlign: 'left',
+                                                                        backgroundColor: 'transparent',
+                                                                        border: 'none',
+                                                                        color: 'var(--color-text)',
+                                                                        cursor: 'pointer',
+                                                                        fontSize: '0.85rem',
+                                                                        transition: 'background-color 0.2s'
+                                                                    }}
+                                                                    onMouseEnter={(e) => {
+                                                                        e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                                                                    }}
+                                                                    onMouseLeave={(e) => {
+                                                                        e.target.style.backgroundColor = 'transparent';
+                                                                    }}
+                                                                >
+                                                                    🔗 Outlook Calendar
+                                                                </button>
+                                                            </div>
+                                                        </>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
                                 </div>
                             ) : (
                                 <div style={{ color: '#f87171', fontSize: '0.85rem', marginBottom: '0.5rem' }}>
@@ -142,7 +337,7 @@ const AvailabilitySummary = ({ availabilities, style }) => {
                                 </div>
                             )}
 
-                            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                            <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
                                 Available: {users.join(', ')}
                             </div>
                         </li>

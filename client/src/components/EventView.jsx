@@ -264,7 +264,7 @@ const EventView = () => {
                 <div style={{ flex: '1 1 300px', maxWidth: '550px', margin: 0, display: 'flex', flexDirection: 'column', gap: availabilities.length > 0 ? '2rem' : '0' }}>
                     {availabilities.length > 0 && (
                         <div style={{ width: '100%' }}>
-                            <AvailabilitySummary availabilities={availabilities} style={{ maxWidth: '100%' }} />
+                            <AvailabilitySummary availabilities={availabilities} event={event} style={{ maxWidth: '100%' }} />
                         </div>
                     )}
 
